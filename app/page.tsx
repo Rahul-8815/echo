@@ -37,9 +37,12 @@ export default function HomePage() {
   useEffect(() => {
     if (user) {
       fetch('/api/users/me')
-        .then(r => r.json())
+        .then(r => (r.ok ? r.json() : null))
         .then(d => {
-          if (d.user) setRole(d.user.role);
+          if (d?.user) setRole(d.user.role);
+        })
+        .catch(err => {
+          console.warn('Failed to fetch user profile:', err);
         });
     }
   }, [user]);
